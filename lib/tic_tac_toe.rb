@@ -14,32 +14,32 @@ class TicTacToe
   [2,4,6]
   ]
   
-   def display_board(board)
-puts" #{board[0]} | #{board[1]} | #{board[2]} "   
-puts"-----------"
-puts" #{board[3]} | #{board[4]} | #{board[5]} "
-puts"-----------"
-puts" #{board[6]} | #{board[7]} | #{board[8]} " 
-end
+def display_board
+    puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
+    puts "-----------"
+    puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
+    puts "-----------"
+    puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
+  end
 
 def input_to_index(user_input)
   index = user_input.to_i - 1
 end
 
-def move(board, index, player)
-  board[index]=player
+def move(index, player="X")
+  @board[index]=player
 end
 
-def position_taken?(board,index)
-  if board[index] == ""|| board[index] == " " || board[index] == nil
+def position_taken?(index)
+  if @board[index] == ""|| @board[index] == " " || @board[index] == nil
    false
   else
    true
   end
 end
 
-  def valid_move?(board, index)
-  if !position_taken?(board, index)  && index.between?(0,board.length-1) 
+  def valid_move?(index)
+  if !position_taken?(index)  && index.between?(0,board.length-1) 
     true
   else
     false
@@ -47,21 +47,21 @@ end
 end
 
 
-def turn(board)
+def turn
   puts "Please enter 1-9"
   input = gets.strip
   index = input_to_index(input)
-  if valid_move?(board,index)
-    move(board, index, current_player(board))
-    puts display_board(board)
+  if valid_move?(index)
+    move(index, current_player)
+    puts display_board
   else
-  turn(board)
+  turn
   end
  end
  
- def turn_count(board)
+ def turn_count
   counter = 0
-  board.each do |turn|
+  @board.each do |turn|
       if turn == "X" || turn == "O"
       counter += 1
     else
@@ -70,19 +70,21 @@ def turn(board)
   end
   counter
 end
-  def current_player(board)
-    if turn_count(board) % 2 == 0 
+
+
+  def current_player
+    if turn_count % 2 == 0 
       "X"
     else
       "O"
   end
 end
 
-def won?(board)
+def won?
   winner = []
-  empty_board = board.all? {|x| x == " "}
+  empty_board = @board.all? {|x| x == " "}
   WIN_COMBINATIONS.each do |win_combination|
-    if win_combination.all? { |win_index| board[win_index] =="X" } || win_combination.all? { |win_index| board[win_index] =="O" }
+    if win_combination.all? { |win_index| @board[win_index] =="X" } || win_combination.all? { |win_index| board[win_index] =="O" }
      winner = win_combination
      
    else
@@ -96,57 +98,46 @@ def won?(board)
   end
 end
 
-def full?(board)
-  !board.any? { |x| x == " " }
+def full?
+  !@board.any? { |x| x == " " }
 end
 
-def draw?(board)
-  if  full?(board)  && !won?(board)
+def draw?
+  if  full?  && !won?
     true
   else
      false
   end
 end
 
-def over?(board)
-  if won?(board) || draw?(board) || full?(board)
+def over?
+  if won? || draw? || full?
     true
   else
     false
   end
 end
   
-def winner(board)
-  if !won?(board)
+def winner
+  if !won?
     nil
-  elsif won?(board).all? {|value| board[value] == "X"}
+  elsif won?.all? {|value| @board[value] == "X"}
     "X"
-  elsif won?(board).all? {|value| board[value] == "O"}
+  elsif won?.all? {|value| @board[value] == "O"}
     "O"
   end
 end
 
-def play(board)
-  until over?(board)
-    turn(board)
+def play
+  until over?
+    turn
   end
-  if won?(board)
-    puts "Congratulations #{winner(board)}!"
-  elsif draw?(board)
+  if won?
+    puts "Congratulations #{winner}!"
+  elsif draw
     puts "Cat's Game!"
   end
 end
 
 
-
- 
-  def current_player
-    turn_count % 2 == 0 ? "X" : "O"
-  end
- 
-  def turn_count
-    @board.count{|token| token == "X" || token == "O"}
-  end
- 
-  
 end
