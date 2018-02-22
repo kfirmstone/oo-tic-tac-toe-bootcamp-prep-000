@@ -78,11 +78,9 @@ end
 
 def won?
   winner = []
-  empty_board = @board.all? {|x| x == " "}
   WIN_COMBINATIONS.each do |win_combination|
     if win_combination.all? { |win_index| @board[win_index] =="X" } || win_combination.all? { |win_index| board[win_index] =="O" }
      winner = win_combination
-     
    else
      false
     end
